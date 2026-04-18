@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Air Incheon Tracker</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f4f4f9; margin: 0; padding: 15px; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        h2 { margin-top: 0; font-size: 1.1rem; color: #333; text-align: center; }
+        .label { font-size: 0.85rem; color: #666; font-weight: bold; margin-bottom: 5px; display: block; }
+        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; background: #007AFF; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; }
+        .result-box { border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; }
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .error { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>에어인천 항공기 현장 점검</h2>
+        <form method="post">
+            <span class="label">항공 편명</span>
+            <input type="text" name="flight_number" placeholder="예: KJ601" value="{{ flight_no }}">
+            <span class="label">주기장/스팟 (선택)</span>
+            <input type="text" name="gate_info" placeholder="예: Spot 15" value="{{ gate_info }}">
+            <button type="submit" name="action" value="search">조회하기</button>
+        </form>
+
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+        {% if flight %}
+        <div class="result-box">
+            <h3 style="margin: 0 0 15px 0; font-size: 1rem; color: #007AFF;">{{ flight.number }} 실시간 정보</h3>
+            <div class="data-row"><span>노선</span> <span>{{ flight.origin_airport_iata }} → {{ flight.destination_airport_iata }}</span></div>
+            <div class="data-row"><span>고도</span> <span>{{ flight.altitude }} ft</span></div>
+            <div class="data-row"><span>지면 속도</span> <span>{{ flight.ground_speed }} kt</span></div>
+            <div class="data-row"><span>입력 주기장</span> <span>{{ gate_info }}</span></div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
