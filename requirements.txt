@@ -1,2 +1,2 @@
-Flask
-pyFlightRadar24
+Flask==3.0.0
+pyFlightRadar24==2.0.2
