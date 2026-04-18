@@ -2,8 +2,12 @@ import os
 from flask import Flask, render_template, request
 from FlightRadar24 import FlightRadar24API
 
-# 이 코드가 박종규님의 현재 GitHub 구조(api와 templates가 나란히 있는 구조)에 딱 맞습니다.
-app = Flask(__name__, template_folder='../templates')
+# Vercel 서버리스 환경에서 templates 폴더 위치를 절대 경로로 추적합니다.
+# 현재 파일(main.py) 위치에서 한 단계 위로 올라가 templates 폴더를 찾습니다.
+current_dir = os.path.dirname(os.path.abspath(__file__))
+template_path = os.path.join(current_dir, "..", "templates")
+
+app = Flask(__name__, template_folder=template_path)
 fr_api = FlightRadar24API()
 
 @app.route('/', methods=['GET', 'POST'])
@@ -16,7 +20,7 @@ def index():
     if request.method == 'POST':
         if flight_no:
             try:
-                # 실시간 항공기 데이터 조회
+                # 실시간 항공 데이터 조회
                 flights = fr_api.get_flights()
                 for f in flights:
                     if f.number == flight_no:
@@ -24,12 +28,18 @@ def index():
                         f.set_flight_details(details)
                         flight_data = f
                         break
+                
                 if not flight_data:
-                    error_msg = f"{flight_no} 편의 정보를 찾을 수 없습니다."
+                    error_msg = f"{flight_no} 정보를 찾을 수 없습니다."
             except Exception as e:
-                error_msg = f"조회 중 오류 발생: {str(e)}"
+                # 에러 발생 시 상세 메시지 출력 (디버깅용)
+                error_msg = "데이터 조회 중 오류가 발생했습니다."
 
-    return render_template('index.html', flight=flight_data, flight_no=flight_no, gate_info=gate_info, error=error_msg)
+    return render_template('index.html', 
+                           flight=flight_data, 
+                           flight_no=flight_no, 
+                           gate_info=gate_info, 
+                           error=error_msg)
 
-# Vercel은 이 변수를 찾아 서버를 실행합니다.
+# Vercel이 Flask 앱을 인식하도록 설정
 app = app
