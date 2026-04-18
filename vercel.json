@@ -4,7 +4,7 @@
   ],
   "functions": {
     "api/main.py": {
-      "runtime": "python@3.9"
+      "runtime": "python"
     }
   }
 }
