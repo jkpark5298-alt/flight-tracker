@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request
 from FlightRadar24 import FlightRadar24API
 
+# 경로 설정
 current_dir = os.path.dirname(os.path.abspath(__file__))
 template_path = os.path.join(current_dir, "..", "templates")
 
@@ -32,5 +33,6 @@ def index():
 
     return render_template('index.html', flight=flight_data, flight_no=flight_no, gate_info=gate_info, error=error_msg)
 
-# 이 부분이 핵심입니다! Vercel이 실행할 객체를 명확히 지정합니다.
-handler = app
+# Vercel이 이 파일을 읽어서 실행할 때 'app' 변수를 찾도록 합니다.
+# 파일 끝에 아래 한 줄이 꼭 있어야 합니다.
+app = app
