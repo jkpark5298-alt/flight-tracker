@@ -2,10 +2,8 @@ import os
 from flask import Flask, render_template, request
 from FlightRadar24 import FlightRadar24API
 
-# Vercel 환경에서 절대 경로 문제 해결을 위해 경로 명시
-app = Flask(__name__, 
-            template_folder=os.path.join(os.path.dirname(__file__), '../templates'))
-
+# 이 코드가 박종규님의 현재 GitHub 구조(api와 templates가 나란히 있는 구조)에 딱 맞습니다.
+app = Flask(__name__, template_folder='../templates')
 fr_api = FlightRadar24API()
 
 @app.route('/', methods=['GET', 'POST'])
